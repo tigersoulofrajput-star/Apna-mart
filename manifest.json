@@ -22,4 +22,14 @@
       "type": "image/png"
     }
   ]
+,
+"screenshots": [
+  {
+    "src": "./apna-mart-showcase.png",
+    "sizes": "1080x1920",
+    "type": "image/png",
+    "form_factor": "narrow",
+    "label": "APNA MART Home Page"
+  }
+]
 }
