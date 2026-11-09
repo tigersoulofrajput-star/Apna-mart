@@ -1,1 +1,13 @@
-
+{
+  "background_color": "#ffffff",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "APNA MART",
+  "orientation": "portrait",
+  "scope": "/",
+  "short_name": "APNA MART",
+  "start_url": "/",
+  "theme_color": "#102a56",
+  "description": "APNA MART – Your One Stop Online Shopping Store",
+  "id": "/"
+}
