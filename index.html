@@ -1,0 +1,1894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#102a56">
+
+<title>APNA MART | Online Shopping</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f3f5f9;
+    color:#172033;
+    padding-bottom:75px;
+}
+
+/* HEADER */
+
+.header{
+    background:#102a56;
+    color:white;
+    padding:12px 16px;
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+.header-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+}
+
+.logo{
+    font-size:23px;
+    font-weight:bold;
+    white-space:nowrap;
+}
+
+.logo span{
+    color:#ffcf4a;
+}
+
+.account-btn{
+    background:transparent;
+    border:1px solid #ffffff55;
+    color:white;
+    padding:9px;
+    border-radius:8px;
+}
+
+/* SEARCH */
+
+.search-box{
+    display:flex;
+    background:white;
+    margin-top:13px;
+    border-radius:9px;
+    overflow:hidden;
+}
+
+.search-box input{
+    flex:1;
+    min-width:0;
+    padding:13px;
+    border:none;
+    outline:none;
+    font-size:15px;
+}
+
+.search-box button{
+    background:#ffcf4a;
+    border:none;
+    padding:0 18px;
+    font-weight:bold;
+}
+
+/* DELIVERY */
+
+.delivery{
+    font-size:12px;
+    margin-top:9px;
+    color:#e5edff;
+}
+
+/* HERO */
+
+.hero{
+    margin:14px;
+    padding:25px 20px;
+    border-radius:16px;
+    background:linear-gradient(120deg,#102a56,#2162a7);
+    color:white;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    min-height:180px;
+}
+
+.hero h1{
+    font-size:28px;
+    margin-bottom:10px;
+}
+
+.hero p{
+    font-size:13px;
+    margin-bottom:15px;
+    color:#e2eaff;
+}
+
+.hero button{
+    background:#ffcf4a;
+    border:none;
+    padding:11px 18px;
+    border-radius:7px;
+    font-weight:bold;
+}
+
+.hero-icon{
+    font-size:65px;
+}
+
+/* SECTION */
+
+.section{
+    padding:10px 14px;
+}
+
+.section-title{
+    font-size:19px;
+    font-weight:bold;
+    margin-bottom:13px;
+}
+
+/* CATEGORIES */
+
+.categories{
+    display:flex;
+    gap:10px;
+    overflow-x:auto;
+    padding-bottom:10px;
+}
+
+.categories::-webkit-scrollbar{
+    display:none;
+}
+
+.category{
+    min-width:78px;
+    background:white;
+    border:1px solid #e5e9f0;
+    border-radius:12px;
+    padding:12px 5px;
+    text-align:center;
+    cursor:pointer;
+    font-size:11px;
+    font-weight:bold;
+}
+
+.category .icon{
+    display:block;
+    font-size:25px;
+    margin-bottom:7px;
+}
+
+/* MOVING PRODUCTS */
+
+.moving-products{
+    display:flex;
+    gap:12px;
+    overflow-x:auto;
+    padding-bottom:12px;
+    scroll-behavior:smooth;
+}
+
+.moving-products::-webkit-scrollbar{
+    display:none;
+}
+
+.moving-card{
+    min-width:155px;
+    background:white;
+    border-radius:12px;
+    overflow:hidden;
+    border:1px solid #e5e9f0;
+}
+
+.moving-card img{
+    width:100%;
+    height:115px;
+    object-fit:contain;
+    padding:8px;
+    background:#f7f8fb;
+}
+
+.moving-card h4{
+    font-size:12px;
+    padding:8px;
+}
+
+.moving-card p{
+    padding:0 8px 10px;
+    font-weight:bold;
+}
+
+/* PRODUCT GRID */
+
+.products{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:11px;
+}
+
+.product{
+    background:white;
+    border:1px solid #e5e9f0;
+    border-radius:12px;
+    overflow:hidden;
+    position:relative;
+}
+
+.product img{
+    width:100%;
+    height:145px;
+    object-fit:contain;
+    padding:8px;
+    background:#f8f9fc;
+}
+
+.product-info{
+    padding:10px;
+}
+
+.product-info h3{
+    font-size:13px;
+    min-height:35px;
+    line-height:1.4;
+}
+
+.price{
+    font-size:18px;
+    font-weight:bold;
+    margin-top:7px;
+}
+
+.old-price{
+    font-size:11px;
+    color:#888;
+    text-decoration:line-through;
+    margin-left:5px;
+}
+
+.discount{
+    color:#07894f;
+    font-size:12px;
+    margin-top:4px;
+}
+
+.rating{
+    color:#987000;
+    font-size:11px;
+    margin:6px 0;
+}
+
+.product-buttons{
+    display:flex;
+    gap:6px;
+    margin-top:9px;
+}
+
+.product-buttons button{
+    flex:1;
+    padding:9px 4px;
+    border:none;
+    border-radius:6px;
+    background:#102a56;
+    color:white;
+    font-size:11px;
+}
+
+.product-buttons .details{
+    background:#eaf0fb;
+    color:#102a56;
+}
+
+.heart{
+    position:absolute;
+    right:8px;
+    top:8px;
+    background:white;
+    color:#c62828;
+    border:none;
+    border-radius:50%;
+    width:30px;
+    height:30px;
+    font-size:18px;
+}
+
+/* PAGES */
+
+.page{
+    display:none;
+    padding:15px;
+}
+
+.page.active{
+    display:block;
+}
+
+.panel{
+    background:white;
+    padding:16px;
+    border-radius:12px;
+    margin-top:10px;
+}
+
+.panel input,
+.panel textarea,
+.panel select{
+    width:100%;
+    padding:11px;
+    border:1px solid #ddd;
+    border-radius:7px;
+    margin:7px 0;
+}
+
+.primary{
+    background:#102a56;
+    color:white;
+    border:none;
+    padding:11px 15px;
+    border-radius:7px;
+    margin-top:8px;
+}
+
+.secondary{
+    background:#eaf0fb;
+    color:#102a56;
+    border:none;
+    padding:9px;
+    border-radius:7px;
+}
+
+.list-item{
+    padding:13px 0;
+    border-bottom:1px solid #eee;
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    align-items:center;
+}
+
+.muted{
+    color:#778196;
+    font-size:12px;
+}
+
+/* BOTTOM NAVIGATION */
+
+.bottom-nav{
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    background:white;
+    border-top:1px solid #ddd;
+    display:flex;
+    justify-content:space-around;
+    padding:8px 2px;
+    z-index:200;
+}
+
+.bottom-nav button{
+    border:none;
+    background:transparent;
+    color:#647087;
+    font-size:10px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:4px;
+}
+
+.bottom-nav button span{
+    font-size:21px;
+}
+
+.bottom-nav button.active{
+    color:#174ea6;
+    font-weight:bold;
+}
+
+.modal-bg{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:#0008;
+    z-index:300;
+    align-items:center;
+    justify-content:center;
+    padding:15px;
+}
+
+.modal{
+    width:100%;
+    max-width:550px;
+    max-height:90vh;
+    overflow:auto;
+    background:white;
+    padding:18px;
+    border-radius:14px;
+}
+
+.close{
+    float:right;
+    background:#eee;
+    border:none;
+    padding:7px 12px;
+    border-radius:6px;
+}
+
+.toast{
+    display:none;
+    position:fixed;
+    bottom:85px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#172033;
+    color:white;
+    padding:12px 18px;
+    border-radius:8px;
+    z-index:500;
+}
+
+@media(min-width:750px){
+    .products{
+        grid-template-columns:repeat(4,minmax(0,1fr));
+    }
+    .header{
+        padding-left:5%;
+        padding-right:5%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<header class="header">
+
+    <div class="header-top">
+
+        <div class="logo">
+            APNA <span>MART</span>
+        </div>
+
+        <button class="account-btn" onclick="openAuth()">
+            👤 <span id="accountName">Sign In</span>
+        </button>
+
+    </div>
+
+    <div class="search-box">
+        <input
+            type="search"
+            id="searchInput"
+            placeholder="Search products, brands and more..."
+            oninput="renderProducts()"
+        >
+        <button onclick="renderProducts()">Search</button>
+    </div>
+
+    <div class="delivery">
+        📍 Deliver to <b id="deliveryLabel">Your Location</b>
+    </div>
+
+</header>
+
+<!-- HOME PAGE -->
+
+<section id="homePage" class="page active">
+
+    <div class="hero">
+
+        <div>
+            <h1>Everything You Need.</h1>
+
+            <p>Everything You Need, All in One Place.</p>
+
+            <button onclick="scrollToProducts()">
+                Shop Now →
+            </button>
+        </div>
+
+        <div class="hero-icon">🛍️</div>
+
+    </div>
+
+    <!-- CATEGORIES -->
+
+    <div class="section">
+
+        <div class="section-title">
+            Shop by Category
+        </div>
+
+        <div class="categories" id="categories"></div>
+
+    </div>
+
+    <!-- MIXED PRODUCTS -->
+
+    <div class="section">
+
+        <div class="section-title">
+            ✨ Today's Picks
+        </div>
+
+        <div class="moving-products" id="movingProducts"></div>
+
+    </div>
+
+    <!-- ALL PRODUCTS -->
+
+    <div class="section" id="productsSection">
+
+        <div class="section-title" id="productTitle">
+            Popular Products
+        </div>
+
+        <div class="products" id="products"></div>
+
+    </div>
+
+</section>
+
+<!-- CART -->
+
+<section id="cartPage" class="page">
+
+    <h2>🛒 My Cart</h2>
+
+    <div class="panel" id="cartContent"></div>
+
+</section>
+
+<!-- WISHLIST -->
+
+<section id="wishlistPage" class="page">
+
+    <h2>♡ My Wishlist</h2>
+
+    <div class="panel" id="wishlistContent"></div>
+
+</section>
+
+<!-- ACCOUNT -->
+
+<section id="accountPage" class="page">
+
+    <h2>👤 My Account</h2>
+
+    <div class="panel" id="accountContent"></div>
+
+</section>
+
+<!-- ORDERS -->
+
+<section id="ordersPage" class="page">
+
+    <h2>📦 My Orders</h2>
+
+    <div class="panel" id="ordersContent"></div>
+
+</section>
+
+<!-- ADMIN -->
+
+<section id="adminPage" class="page">
+
+    <h2>⚙️ Admin Dashboard</h2>
+
+    <div class="panel" id="adminContent"></div>
+
+</section>
+
+<!-- BOTTOM NAV -->
+
+<nav class="bottom-nav">
+
+    <button class="active" data-page="home" onclick="showPage('home')">
+        <span>⌂</span>
+        Home
+    </button>
+
+    <button onclick="showCategories()">
+        <span>▦</span>
+        Categories
+    </button>
+
+    <button data-page="wishlist" onclick="showPage('wishlist')">
+        <span>♡</span>
+        Wishlist
+    </button>
+
+    <button data-page="cart" onclick="showPage('cart')">
+        <span>🛒</span>
+        Cart
+    </button>
+
+    <button data-page="account" onclick="showPage('account')">
+        <span>☻</span>
+        Account
+    </button>
+
+</nav>
+
+<!-- MODAL -->
+
+<div class="modal-bg" id="modalBg">
+
+    <div class="modal" id="modal"></div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+/* SUPABASE CONNECTION */
+
+const SUPABASE_URL =
+"https://sruahwsaccedcypdfaag.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_4e8SV2CS8lMdQk7VmQ9SYQ_yHeh05pY";
+
+const db = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+/* GLOBAL VARIABLES */
+
+let user = null;
+let profile = null;
+
+let products = [];
+let categories = [];
+
+let cart = [];
+let wishlist = [];
+
+let activeCategory = "All";
+
+
+/* HELPERS */
+
+const $ = id => document.getElementById(id);
+
+function money(value){
+    return "₹" + Number(value || 0).toLocaleString("en-IN");
+}
+
+function safe(value=""){
+    return String(value).replace(/[&<>"']/g, c => ({
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#39;"
+    })[c]);
+}
+
+function toast(message){
+    $("toast").textContent = message;
+    $("toast").style.display = "block";
+
+    setTimeout(()=>{
+        $("toast").style.display = "none";
+    },2500);
+}
+
+function shuffle(array){
+    let result = [...array];
+
+    for(let i=result.length-1;i>0;i--){
+        let j=Math.floor(Math.random()*(i+1));
+
+        [result[i],result[j]] =
+        [result[j],result[i]];
+    }
+
+    return result;
+}
+
+
+/* NAVIGATION */
+
+function showPage(page){
+
+    document.querySelectorAll(".page").forEach(p=>{
+        p.classList.remove("active");
+    });
+
+    $(page+"Page").classList.add("active");
+
+    document.querySelectorAll(".bottom-nav button").forEach(b=>{
+        b.classList.toggle(
+            "active",
+            b.dataset.page === page
+        );
+    });
+
+    if(page==="cart") renderCart();
+    if(page==="wishlist") renderWishlist();
+    if(page==="account") renderAccount();
+    if(page==="orders") renderOrders();
+    if(page==="admin") renderAdmin();
+
+    window.scrollTo(0,0);
+}
+
+function showCategories(){
+    showPage("home");
+
+    $("categories").scrollIntoView({
+        behavior:"smooth"
+    });
+}
+
+function scrollToProducts(){
+    $("productsSection").scrollIntoView({
+        behavior:"smooth"
+    });
+}
+
+
+/* MODAL */
+
+function openModal(html){
+    $("modal").innerHTML=html;
+    $("modalBg").style.display="flex";
+}
+
+function closeModal(){
+    $("modalBg").style.display="none";
+}
+
+$("modalBg").addEventListener("click",e=>{
+    if(e.target.id==="modalBg") closeModal();
+});
+
+
+/* AUTHENTICATION */
+
+async function loadSession(){
+
+    const {data}=await db.auth.getSession();
+
+    user=data.session?.user || null;
+
+    await loadProfile();
+    await loadUserData();
+
+    updateHeader();
+}
+
+async function loadProfile(){
+
+    profile=null;
+
+    if(!user) return;
+
+    const {data}=await db
+        .from("profiles")
+        .select("*")
+        .eq("id",user.id)
+        .maybeSingle();
+
+    profile=data;
+}
+
+function updateHeader(){
+
+    $("accountName").textContent =
+    user
+    ? profile?.full_name || user.email?.split("@")[0]
+    : "Sign In";
+}
+
+function openAuth(){
+
+    openModal(`
+        <button class="close" onclick="closeModal()">✕</button>
+
+        <h2>APNA MART Account</h2>
+
+        <p class="muted">Sign in or create your account.</p>
+
+        <input id="authEmail" type="email"
+        placeholder="Email address">
+
+        <input id="authPassword" type="password"
+        placeholder="Password">
+
+        <button class="primary" onclick="signIn()">
+            Sign In
+        </button>
+
+        <button class="secondary" onclick="signUp()">
+            Create Account
+        </button>
+
+        <p class="muted">
+            Email/password login is enabled.
+            Phone OTP can be added later.
+        </p>
+    `);
+}
+
+async function signIn(){
+
+    const email=$("authEmail").value.trim();
+    const password=$("authPassword").value;
+
+    const {data,error}=await db.auth.signInWithPassword({
+        email,
+        password
+    });
+
+    if(error){
+        toast(error.message);
+        return;
+    }
+
+    user=data.user;
+
+    await loadProfile();
+    await loadUserData();
+
+    updateHeader();
+    closeModal();
+
+    toast("Login successful!");
+
+    showPage("account");
+}
+
+async function signUp(){
+
+    const email=$("authEmail").value.trim();
+    const password=$("authPassword").value;
+
+    if(password.length<6){
+        toast("Password must be at least 6 characters.");
+        return;
+    }
+
+    const {data,error}=await db.auth.signUp({
+        email,
+        password
+    });
+
+    if(error){
+        toast(error.message);
+        return;
+    }
+
+    if(data.session){
+        user=data.user;
+
+        await loadProfile();
+        updateHeader();
+
+        closeModal();
+    }
+
+    toast("Check your email for confirmation.");
+}
+
+async function signOut(){
+
+    await db.auth.signOut();
+
+    user=null;
+    profile=null;
+
+    cart=[];
+    wishlist=[];
+
+    updateHeader();
+
+    showPage("home");
+
+    toast("Signed out");
+}
+
+async function requireLogin(){
+
+    if(user) return true;
+
+    openAuth();
+
+    toast("Please sign in first.");
+
+    return false;
+}
+
+
+/* DATABASE LOAD */
+
+async function loadStore(){
+
+    const c=await db
+        .from("categories")
+        .select("*")
+        .order("name");
+
+    categories=c.data || [];
+
+    const p=await db
+        .from("products")
+        .select("*,categories(name)")
+        .eq("is_active",true);
+
+    products=p.data || [];
+
+    renderCategories();
+    renderProducts();
+
+    if(c.error || p.error){
+        console.error(c.error,p.error);
+        toast("Please check Supabase tables and RLS.");
+    }
+}
+
+
+/* CATEGORIES */
+
+function renderCategories(){
+
+    const icons=[
+        "🛍️","📱","💻","⌚","👕",
+        "🏠","🧸","📚","✏️","⚽"
+    ];
+
+    const names=[
+        "All",
+        ...categories.map(c=>c.name)
+    ];
+
+    $("categories").innerHTML=names.map((name,i)=>`
+
+        <button class="category"
+        onclick="chooseCategory('${safe(name)}')">
+
+            <span class="icon">
+                ${icons[i%icons.length]}
+            </span>
+
+            ${safe(name)}
+
+        </button>
+
+    `).join("");
+}
+
+function chooseCategory(name){
+
+    activeCategory=name;
+
+    renderProducts();
+}
+
+
+/* PRODUCTS */
+
+function renderProducts(){
+
+    const query=$("searchInput").value
+    .toLowerCase().trim();
+
+    let list=products.filter(p=>{
+
+        const category=p.categories?.name || "";
+
+        const matchesCategory =
+        activeCategory==="All" ||
+        category===activeCategory;
+
+        const matchesSearch =
+        !query ||
+        `${p.name} ${p.description||""} ${category}`
+        .toLowerCase()
+        .includes(query);
+
+        return matchesCategory && matchesSearch;
+    });
+
+    if(!query && activeCategory==="All"){
+        list=shuffle(list);
+    }
+
+    $("productTitle").textContent =
+    activeCategory==="All"
+    ? "Popular Products"
+    : activeCategory;
+
+    $("products").innerHTML=list.length
+    ? list.map(p=>{
+
+        const discount =
+        p.old_price>p.price
+        ? Math.round(
+            (p.old_price-p.price)*100/p.old_price
+          )
+        : 0;
+
+        return `
+
+        <div class="product">
+
+            <button class="heart"
+            onclick="toggleWishlist('${p.id}')">
+                ♡
+            </button>
+
+            <img
+            src="${safe(p.image_url || "")}"
+            alt="${safe(p.name)}"
+            onerror="this.style.opacity='.3'">
+
+            <div class="product-info">
+
+                <h3>${safe(p.name)}</h3>
+
+                <div class="price">
+                    ${money(p.price)}
+
+                    ${p.old_price
+                    ? `<span class="old-price">
+                        ${money(p.old_price)}
+                       </span>`
+                    : ""}
+                </div>
+
+                ${discount
+                ? `<div class="discount">
+                    ${discount}% OFF
+                   </div>`
+                : ""}
+
+                <div class="rating">
+                    ★ Sample listing · Stock: ${p.stock ?? "—"}
+                </div>
+
+                <div class="product-buttons">
+
+                    <button class="details"
+                    onclick="openProduct('${p.id}')">
+                        Details
+                    </button>
+
+                    <button onclick="addCart('${p.id}')">
+                        Add to Cart
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        `;
+    }).join("")
+    : `<p>No products found.</p>`;
+
+    renderMovingProducts();
+}
+
+
+/* MIXED MOVING PRODUCTS */
+
+function renderMovingProducts(){
+
+    const list=shuffle(products).slice(0,15);
+
+    $("movingProducts").innerHTML=list.map(p=>`
+
+        <div class="moving-card"
+        onclick="openProduct('${p.id}')">
+
+            <img
+            src="${safe(p.image_url || "")}"
+            alt="${safe(p.name)}">
+
+            <h4>${safe(p.name)}</h4>
+
+            <p>${money(p.price)}</p>
+
+        </div>
+
+    `).join("");
+}
+
+
+/* PRODUCT DETAILS */
+
+function openProduct(id){
+
+    const p=products.find(x=>x.id===id);
+
+    if(!p) return;
+
+    openModal(`
+
+        <button class="close" onclick="closeModal()">✕</button>
+
+        <h2>${safe(p.name)}</h2>
+
+        <img
+        src="${safe(p.image_url || "")}"
+        style="width:100%;height:230px;object-fit:contain">
+
+        <h2>${money(p.price)}</h2>
+
+        <p>${safe(p.description || "Product details coming soon.")}</p>
+
+        <p>Available Stock: ${p.stock ?? "—"}</p>
+
+        <button class="primary"
+        onclick="addCart('${p.id}');closeModal()">
+            Add to Cart
+        </button>
+
+    `);
+}
+
+
+/* CART AND WISHLIST */
+
+async function loadUserData(){
+
+    cart=[];
+    wishlist=[];
+
+    if(!user){
+        updateCartCount();
+        return;
+    }
+
+    const c=await db
+        .from("cart_items")
+        .select("id,user_id,product_id,quantity,products(*)")
+        .eq("user_id",user.id);
+
+    const w=await db
+        .from("wishlist")
+        .select("id,user_id,product_id,products(*)")
+        .eq("user_id",user.id);
+
+    cart=c.data || [];
+    wishlist=w.data || [];
+
+    updateCartCount();
+}
+
+function updateCartCount(){
+
+    const count=cart.reduce(
+        (total,item)=>total+Number(item.quantity||0),
+        0
+    );
+
+    $("cartContent").dataset.count=count;
+}
+
+async function addCart(id){
+
+    if(!await requireLogin()) return;
+
+    const found=cart.find(x=>x.product_id===id);
+
+    let result;
+
+    if(found){
+
+        result=await db
+        .from("cart_items")
+        .update({
+            quantity:found.quantity+1
+        })
+        .eq("id",found.id);
+
+    }else{
+
+        result=await db
+        .from("cart_items")
+        .insert({
+            user_id:user.id,
+            product_id:id,
+            quantity:1
+        });
+
+    }
+
+    if(result.error){
+        toast(result.error.message);
+        return;
+    }
+
+    await loadUserData();
+
+    toast("Added to cart!");
+}
+
+async function toggleWishlist(id){
+
+    if(!await requireLogin()) return;
+
+    const found=wishlist.find(
+        x=>x.product_id===id
+    );
+
+    let result;
+
+    if(found){
+
+        result=await db
+        .from("wishlist")
+        .delete()
+        .eq("id",found.id);
+
+    }else{
+
+        result=await db
+        .from("wishlist")
+        .insert({
+            user_id:user.id,
+            product_id:id
+        });
+
+    }
+
+    if(result.error){
+        toast(result.error.message);
+        return;
+    }
+
+    await loadUserData();
+
+    toast("Wishlist updated");
+}
+
+
+/* CART PAGE */
+
+async function renderCart(){
+
+    if(!user){
+        $("cartContent").innerHTML=
+        `<p>Please sign in to view your cart.</p>`;
+        return;
+    }
+
+    await loadUserData();
+
+    if(!cart.length){
+        $("cartContent").innerHTML=
+        "<p>Your cart is empty.</p>";
+        return;
+    }
+
+    let total=0;
+
+    $("cartContent").innerHTML=cart.map(item=>{
+
+        const p=item.products || {};
+
+        const line=Number(p.price||0)*item.quantity;
+
+        total+=line;
+
+        return `
+
+        <div class="list-item">
+
+            <div>
+                <b>${safe(p.name)}</b>
+                <p class="muted">${money(p.price)}</p>
+            </div>
+
+            <div>
+                <button class="secondary"
+                onclick="changeQty('${item.id}',${item.quantity-1})">
+                    −
+                </button>
+
+                ${item.quantity}
+
+                <button class="secondary"
+                onclick="changeQty('${item.id}',${item.quantity+1})">
+                    +
+                </button>
+            </div>
+
+            <b>${money(line)}</b>
+
+        </div>
+
+        `;
+
+    }).join("")+`
+
+        <h3 style="margin:15px 0">
+            Total: ${money(total)}
+        </h3>
+
+        <button class="primary" onclick="checkout()">
+            Proceed to Checkout — COD
+        </button>
+
+    `;
+}
+
+async function changeQty(id,qty){
+
+    if(qty<=0){
+
+        await db
+        .from("cart_items")
+        .delete()
+        .eq("id",id);
+
+    }else{
+
+        await db
+        .from("cart_items")
+        .update({quantity:qty})
+        .eq("id",id);
+
+    }
+
+    await loadUserData();
+
+    renderCart();
+}
+
+
+/* WISHLIST PAGE */
+
+async function renderWishlist(){
+
+    if(!user){
+        $("wishlistContent").innerHTML=
+        "<p>Please sign in first.</p>";
+        return;
+    }
+
+    await loadUserData();
+
+    $("wishlistContent").innerHTML=wishlist.length
+    ? wishlist.map(w=>`
+
+        <div class="list-item">
+
+            <b>${safe(w.products?.name || "Product")}</b>
+
+            <span>${money(w.products?.price)}</span>
+
+            <button class="secondary"
+            onclick="addCart('${w.product_id}')">
+                Add to Cart
+            </button>
+
+            <button class="secondary"
+            onclick="toggleWishlist('${w.product_id}')">
+                Remove
+            </button>
+
+        </div>
+
+    `).join("")
+    : "Your wishlist is empty.";
+}
+
+
+/* ACCOUNT AND ADDRESS */
+
+async function renderAccount(){
+
+    if(!user){
+
+        $("accountContent").innerHTML=`
+            <p>Sign in to manage your account.</p>
+            <button class="primary" onclick="openAuth()">
+                Sign In / Sign Up
+            </button>
+        `;
+
+        return;
+    }
+
+    const {data:addresses}=await db
+        .from("addresses")
+        .select("*")
+        .eq("user_id",user.id);
+
+    $("accountContent").innerHTML=`
+
+        <h3>${safe(profile?.full_name || "Customer")}</h3>
+
+        <p>${safe(user.email || "")}</p>
+
+        <p class="muted">Account: ${safe(profile?.role || "customer")}</p>
+
+        <button class="secondary" onclick="signOut()">
+            Sign Out
+        </button>
+
+        <hr style="margin:15px 0">
+
+        <h3>My Addresses</h3>
+
+        ${(addresses||[]).map(a=>`
+            <div class="list-item">
+                <div>
+                    <b>${safe(a.full_name)}</b>
+                    <p class="muted">
+                        ${safe(a.address)}, ${safe(a.city)},
+                        ${safe(a.state)} - ${safe(a.pincode)}
+                    </p>
+                </div>
+            </div>
+        `).join("")}
+
+        <h3 style="margin-top:20px">Add Address</h3>
+
+        <input id="aName" placeholder="Full Name">
+        <input id="aPhone" placeholder="Phone Number">
+        <input id="aAddress" placeholder="Full Address">
+        <input id="aCity" placeholder="City">
+        <input id="aState" placeholder="State">
+        <input id="aPin" placeholder="PIN Code">
+
+        <button class="primary" onclick="saveAddress()">
+            Save Address
+        </button>
+
+        <button class="secondary" onclick="useLocation()">
+            Use My Location
+        </button>
+
+    `;
+}
+
+async function saveAddress(){
+
+    const a={
+        user_id:user.id,
+        full_name:$("aName").value.trim(),
+        phone:$("aPhone").value.trim(),
+        address:$("aAddress").value.trim(),
+        city:$("aCity").value.trim(),
+        state:$("aState").value.trim(),
+        pincode:$("aPin").value.trim(),
+        is_default:true
+    };
+
+    if(Object.values(a).some(v=>v==="" || v===null)){
+        toast("Please complete all address fields.");
+        return;
+    }
+
+    const {error}=await db
+        .from("addresses")
+        .insert(a);
+
+    if(error){
+        toast(error.message);
+        return;
+    }
+
+    $("deliveryLabel").textContent=
+    a.city+" "+a.pincode;
+
+    toast("Address saved!");
+
+    renderAccount();
+}
+
+function useLocation(){
+
+    if(!navigator.geolocation){
+        toast("Location unavailable");
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(pos=>{
+
+        toast(
+            "Location captured. Please enter your postal address manually."
+        );
+
+        $("aAddress").value=
+        `GPS: ${pos.coords.latitude}, ${pos.coords.longitude}`;
+
+    },()=>{
+        toast("Location permission denied.");
+    });
+}
+
+
+/* CHECKOUT */
+
+async function checkout(){
+
+    if(!await requireLogin()) return;
+
+    const {data:addresses,error}=await db
+        .from("addresses")
+        .select("*")
+        .eq("user_id",user.id);
+
+    if(error){
+        toast(error.message);
+        return;
+    }
+
+    if(!addresses?.length){
+        showPage("account");
+        toast("Please add a delivery address first.");
+        return;
+    }
+
+    openModal(`
+
+        <button class="close" onclick="closeModal()">✕</button>
+
+        <h2>Confirm Your Order</h2>
+
+        <p>Select delivery address</p>
+
+        <select id="checkoutAddress">
+
+            ${addresses.map(a=>`
+                <option value="${a.id}">
+                    ${safe(a.full_name)} — ${safe(a.city)}
+                    ${safe(a.pincode)}
+                </option>
+            `).join("")}
+
+        </select>
+
+        <p class="muted">
+            Payment Method: Cash on Delivery.
+            Online payment will be added later.
+        </p>
+
+        <button class="primary" onclick="placeOrder()">
+            Place Order
+        </button>
+
+    `);
+}
+
+async function placeOrder(){
+
+    const addressId=$("checkoutAddress").value;
+
+    const {data,error}=await db.rpc(
+        "place_apna_mart_order",
+        {
+            p_address_id:addressId
+        }
+    );
+
+    if(error){
+        toast(error.message);
+        return;
+    }
+
+    closeModal();
+
+    await loadUserData();
+
+    toast("Order placed successfully!");
+
+    showPage("orders");
+}
+
+
+/* ORDERS */
+
+async function renderOrders(){
+
+    if(!user){
+        $("ordersContent").innerHTML=
+        "<p>Please sign in to see your orders.</p>";
+        return;
+    }
+
+    const {data,error}=await db
+        .from("orders")
+        .select("*,order_items(*)")
+        .eq("user_id",user.id)
+        .order("created_at",{ascending:false});
+
+    if(error){
+        $("ordersContent").textContent=error.message;
+        return;
+    }
+
+    if(!data?.length){
+        $("ordersContent").innerHTML=
+        "<p>No orders found.</p>";
+        return;
+    }
+
+    $("ordersContent").innerHTML=data.map(o=>`
+
+        <div class="list-item">
+
+            <div>
+                <b>Order ${safe(o.order_number)}</b>
+
+                <p class="muted">
+                    ${new Date(o.created_at).toLocaleString()}
+                </p>
+
+                <p>
+                    ${(o.order_items||[]).map(i=>
+                        `${safe(i.product_name)} × ${i.quantity}`
+                    ).join("<br>")}
+                </p>
+
+                <b>${money(o.total_amount)}</b>
+
+                <p class="muted">Status: ${safe(o.status)}</p>
+
+            </div>
+
+            <div>
+                <button class="secondary"
+                onclick="requestOrder('${o.id}','cancel')">
+                    Cancel Request
+                </button>
+
+                <button class="secondary"
+                onclick="requestOrder('${o.id}','return')">
+                    Return Request
+                </button>
+            </div>
+
+        </div>
+
+    `).join("");
+}
+
+async function requestOrder(id,type){
+
+    const reason=prompt("Please enter the reason:");
+
+    if(reason===null) return;
+
+    const {error}=await db
+        .from("order_requests")
+        .insert({
+            order_id:id,
+            user_id:user.id,
+            request_type:type,
+            reason,
+            status:"pending"
+        });
+
+    toast(error ? error.message : "Request submitted.");
+}
+
+
+/* ADMIN */
+
+async function renderAdmin(){
+
+    if(!user || profile?.role!=="admin"){
+
+        $("adminContent").innerHTML=
+        "<p>Admin access only.</p>";
+
+        return;
+    }
+
+    $("adminContent").innerHTML=`
+
+        <h3>Add New Product</h3>
+
+        <input id="pName" placeholder="Product Name">
+
+        <select id="pCategory">
+
+            ${categories.map(c=>`
+                <option value="${c.id}">
+                    ${safe(c.name)}
+                </option>
+            `).join("")}
+
+        </select>
+
+        <input id="pPrice" type="number" placeholder="Price">
+
+        <input id="pOld" type="number" placeholder="Old Price">
+
+        <input id="pStock" type="number" placeholder="Stock">
+
+        <input id="pImage" placeholder="Product Image URL">
+
+        <textarea id="pDescription"
+        placeholder="Product Description"></textarea>
+
+        <button class="primary" onclick="addProduct()">
+            Save Product
+        </button>
+
+        <h3 style="margin-top:20px">Manage Products</h3>
+
+        <div id="adminProducts"></div>
+
+        <h3 style="margin-top:20px">Recent Orders</h3>
+
+        <div id="adminOrders"></div>
+
+    `;
+
+    $("adminProducts").innerHTML=products.map(p=>`
+
+        <div class="list-item">
+
+            <span>
+                ${safe(p.name)} — ${money(p.price)}
+            </span>
+
+            <button class="secondary"
+            onclick="deactivateProduct('${p.id}')">
+                Deactivate
+            </button>
+
+        </div>
+
+    `).join("");
+
+    const {data:orders}=await db
+        .from("orders")
+        .select("*")
+        .order("created_at",{ascending:false})
+        .limit(30);
+
+    $("adminOrders").innerHTML=(orders||[]).map(o=>`
+
+        <div class="list-item">
+
+            <span>
+                ${safe(o.order_number)} — ${money(o.total_amount)}
+            </span>
+
+            <select onchange="updateOrderStatus('${o.id}',this.value)">
+
+                ${["pending","confirmed","shipped","delivered","cancelled"].map(s=>`
+                    <option value="${s}" ${o.status===s?"selected":""}>
+                        ${s}
+                    </option>
+                `).join("")}
+
+            </select>
+
+        </div>
+
+    `).join("");
+}
+
+async function addProduct(){
+
+    const p={
+        name:$("pName").value.trim(),
+        category_id:$("pCategory").value,
+        price:Number($("pPrice").value),
+        old_price:Number($("pOld").value)||null,
+        stock:Number($("pStock").value)||0,
+        image_url:$("pImage").value.trim()||null,
+        description:$("pDescription").value.trim(),
+        is_active:true
+    };
+
+    if(!p.name || !p.category_id || !p.price){
+        toast("Enter product name, category and price.");
+        return;
+    }
+
+    const {error}=await db
+        .from("products")
+        .insert(p);
+
+    if(error){
+        toast(error.message);
+        return;
+    }
+
+    toast("Product added!");
+
+    await loadStore();
+    renderAdmin();
+}
+
+async function deactivateProduct(id){
+
+    if(!confirm("Deactivate this product?")) return;
+
+    const {error}=await db
+        .from("products")
+        .update({is_active:false})
+        .eq("id",id);
+
+    if(error){
+        toast(error.message);
+        return;
+    }
+
+    toast("Product deactivated.");
+
+    await loadStore();
+    renderAdmin();
+}
+
+async function updateOrderStatus(id,status){
+
+    const {error}=await db
+        .from("orders")
+        .update({status})
+        .eq("id",id);
+
+    toast(error ? error.message : "Order status updated.");
+}
+
+
+/* AUTH STATE */
+
+db.auth.onAuthStateChange((_event,session)=>{
+
+    user=session?.user || null;
+
+    setTimeout(async()=>{
+
+        await loadProfile();
+        await loadUserData();
+
+        updateHeader();
+
+    },0);
+
+});
+
+
+/* START WEBSITE */
+
+(async()=>{
+
+    await loadSession();
+
+    await loadStore();
+
+    setInterval(()=>{
+        if(products.length){
+            renderMovingProducts();
+        }
+    },6000);
+
+})();
+
+</script>
+
+</body>
+</html>
