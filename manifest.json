@@ -10,4 +10,17 @@
   "theme_color": "#102a56",
   "description": "APNA MART – Your One Stop Online Shopping Store",
   "id": "/"
+,
+"icons": [
+  {
+    "src": "./apna-mart-icon-192.png",
+    "sizes": "192x192",
+    "type": "image/png"
+  },
+  {
+    "src": "./apna-mart-icon-512.png",
+    "sizes": "512x512",
+    "type": "image/png"
+  }
+]
 }
