@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APNA MART | Online Shopping</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  background:#f1f3f6;
+  color:#172337;
+}
+
+header{
+  background:#172b4d;
+  color:white;
+  padding:16px;
+}
+
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.logo{
+  font-size:25px;
+  font-weight:bold;
+}
+
+.cart{
+  background:#ffcc00;
+  color:#172337;
+  padding:9px 14px;
+  border-radius:6px;
+  font-weight:bold;
+}
+
+.search{
+  margin-top:15px;
+  display:flex;
+  background:white;
+  border-radius:7px;
+  overflow:hidden;
+}
+
+.search input{
+  flex:1;
+  padding:13px;
+  border:0;
+  outline:none;
+  font-size:15px;
+}
+
+.search button{
+  border:0;
+  background:#ffcc00;
+  padding:0 17px;
+  font-weight:bold;
+}
+
+.location{
+  background:#25436c;
+  padding:9px 16px;
+  font-size:13px;
+}
+
+h2{
+  font-size:19px;
+  margin:22px 15px 13px;
+}
+
+.categories{
+  display:flex;
+  overflow-x:auto;
+  gap:13px;
+  padding:5px 15px;
+}
+
+.category{
+  min-width:78px;
+  text-align:center;
+  background:white;
+  padding:13px 5px;
+  border-radius:10px;
+  font-size:12px;
+  box-shadow:0 2px 7px #ddd;
+}
+
+.category span{
+  display:block;
+  font-size:27px;
+  margin-bottom:7px;
+}
+
+.banner{
+  margin:20px 15px;
+  background:linear-gradient(120deg,#173b70,#3279c8);
+  color:white;
+  border-radius:12px;
+  padding:27px 20px;
+}
+
+.banner h1{
+  font-size:25px;
+  margin-bottom:9px;
+}
+
+.banner p{
+  margin-bottom:16px;
+  font-size:14px;
+}
+
+.banner button{
+  padding:10px 18px;
+  border:0;
+  border-radius:5px;
+  background:#ffcc00;
+  font-weight:bold;
+}
+
+.products{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:13px;
+  padding:0 13px 90px;
+}
+
+.product{
+  background:white;
+  border-radius:10px;
+  overflow:hidden;
+  padding-bottom:13px;
+  box-shadow:0 2px 7px #ddd;
+}
+
+.product img{
+  width:100%;
+  height:145px;
+  object-fit:contain;
+  background:white;
+  padding:10px;
+}
+
+.product h3{
+  font-size:14px;
+  padding:0 10px;
+}
+
+.price{
+  color:#16833d;
+  font-weight:bold;
+  margin:8px 10px;
+}
+
+.product button{
+  margin:0 10px;
+  width:calc(100% - 20px);
+  border:0;
+  padding:9px;
+  border-radius:5px;
+  background:#ffcc00;
+  font-weight:bold;
+}
+
+.bottom{
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  background:white;
+  display:flex;
+  justify-content:space-around;
+  padding:12px 0;
+  box-shadow:0 -2px 10px #ddd;
+}
+
+.bottom div{
+  text-align:center;
+  font-size:12px;
+}
+
+.bottom span{
+  display:block;
+  font-size:20px;
+  margin-bottom:3px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="top">
+    <div class="logo">🛒 APNA MART</div>
+    <div class="cart">Cart 🛍️ <span id="cartCount">0</span></div>
+  </div>
+
+  <div class="search">
+    <input type="text" id="searchInput" placeholder="Search products...">
+    <button onclick="searchProducts()">SEARCH</button>
+  </div>
+</header>
+
+<div class="location">
+  📍 Deliver to India
+</div>
+
+<h2>Shop By Category</h2>
+
+<div class="categories">
+  <div class="category"><span>📱</span>Mobiles</div>
+  <div class="category"><span>👕</span>Fashion</div>
+  <div class="category"><span>💻</span>Electronics</div>
+  <div class="category"><span>🏠</span>Home</div>
+  <div class="category"><span>💄</span>Beauty</div>
+  <div class="category"><span>📚</span>Books</div>
+  <div class="category"><span>🥫</span>Grocery</div>
+</div>
+
+<div class="banner">
+  <h1>Big Shopping Days!</h1>
+  <p>Discover amazing products at amazing prices.</p>
+  <button onclick="document.getElementById('products').scrollIntoView()">Shop Now</button>
+</div>
+
+<h2>🔥 Trending Products</h2>
+
+<div class="products" id="products">
+
+  <div class="product">
+    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30b?w=400" alt="Headphones">
+    <h3>Premium Headphones</h3>
+    <div class="price">₹1,499</div>
+    <button onclick="addCart()">Add to Cart</button>
+  </div>
+
+  <div class="product">
+    <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400" alt="Watch">
+    <h3>Smart Watch</h3>
+    <div class="price">₹1,999</div>
+    <button onclick="addCart()">Add to Cart</button>
+  </div>
+
+  <div class="product">
+    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400" alt="Shoes">
+    <h3>Sports Shoes</h3>
+    <div class="price">₹2,499</div>
+    <button onclick="addCart()">Add to Cart</button>
+  </div>
+
+  <div class="product">
+    <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=400" alt="Camera">
+    <h3>Digital Camera</h3>
+    <div class="price">₹5,999</div>
+    <button onclick="addCart()">Add to Cart</button>
+  </div>
+
+</div>
+
+<div class="bottom">
+  <div><span>🏠</span>Home</div>
+  <div><span>📂</span>Categories</div>
+  <div><span>❤️</span>Wishlist</div>
+  <div><span>🛒</span>Cart</div>
+  <div><span>👤</span>Account</div>
+</div>
+
+<script>
+let cartCount=0;
+
+function addCart(){
+  cartCount++;
+  document.getElementById("cartCount").innerText=cartCount;
+  alert("Product added to cart!");
+}
+
+function searchProducts(){
+  let input=document.getElementById("searchInput").value.toLowerCase();
+  let products=document.querySelectorAll(".product");
+
+  products.forEach(product=>{
+    let name=product.querySelector("h3").innerText.toLowerCase();
+
+    product.style.display=name.includes(input)?"block":"none";
+  });
+}
+</script>
+
+</body>
+</html>
