@@ -1,1 +1,1523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#102a56">
 
+<title>APNA MART | Admin Panel</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+    --primary:#102a56;
+    --accent:#ffcf4a;
+    --bg:#f3f5f9;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:var(--bg);
+    color:#172033;
+}
+
+header{
+    background:var(--primary);
+    color:white;
+    padding:17px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:10;
+}
+
+header h2 span{
+    color:var(--accent);
+}
+
+button{
+    cursor:pointer;
+}
+
+.logout{
+    background:#ffffff22;
+    border:1px solid #ffffff66;
+    color:white;
+    padding:9px 13px;
+    border-radius:7px;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:15px;
+}
+
+.login-box,.box{
+    background:white;
+    border-radius:12px;
+    padding:17px;
+    margin-bottom:15px;
+    box-shadow:0 2px 12px #00000008;
+}
+
+.login-box{
+    max-width:420px;
+    margin:60px auto;
+}
+
+input,textarea,select{
+    width:100%;
+    padding:12px;
+    margin:7px 0;
+    border:1px solid #dce1e9;
+    border-radius:7px;
+    outline:none;
+    background:white;
+}
+
+textarea{
+    min-height:85px;
+    resize:vertical;
+}
+
+label{
+    display:block;
+    margin-top:12px;
+    font-size:13px;
+    font-weight:bold;
+}
+
+.primary{
+    background:var(--primary);
+    color:white;
+    border:0;
+    padding:11px 15px;
+    border-radius:7px;
+}
+
+.warning{
+    background:#fff0c2;
+    color:#725000;
+    border:0;
+    padding:9px 12px;
+    border-radius:7px;
+}
+
+.danger{
+    background:#ffe6e6;
+    color:#b42318;
+    border:0;
+    padding:9px 12px;
+    border-radius:7px;
+}
+
+.small{
+    font-size:12px;
+    color:#748096;
+}
+
+.hidden{
+    display:none!important;
+}
+
+.tabs{
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    padding:5px 0 13px;
+}
+
+.tabs button{
+    white-space:nowrap;
+    background:white;
+    border:1px solid #dce1e9;
+    padding:11px 14px;
+    border-radius:8px;
+}
+
+.tabs button.active{
+    background:var(--primary);
+    color:white;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.stat{
+    background:white;
+    border-radius:10px;
+    padding:15px;
+}
+
+.stat strong{
+    display:block;
+    font-size:24px;
+    margin-top:7px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px;
+}
+
+.item{
+    background:white;
+    padding:12px;
+    border:1px solid #e4e8ef;
+    border-radius:10px;
+    min-width:0;
+}
+
+.item img{
+    width:100%;
+    height:130px;
+    object-fit:contain;
+    background:#f7f8fb;
+    border-radius:7px;
+}
+
+.item h3{
+    font-size:14px;
+    margin:8px 0;
+}
+
+.item-actions{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+    margin-top:10px;
+}
+
+.item-actions button{
+    flex:1;
+}
+
+.photo-preview{
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    margin:10px 0;
+}
+
+.photo-preview img{
+    width:75px;
+    height:75px;
+    object-fit:cover;
+    border-radius:7px;
+    border:1px solid #ddd;
+}
+
+.checkrow{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    margin:12px 0;
+}
+
+.checkrow input{
+    width:auto;
+    margin:0;
+}
+
+.checkrow label{
+    margin:0;
+}
+
+hr{
+    border:0;
+    border-top:1px solid #eee;
+    margin:16px 0;
+}
+
+.toast{
+    position:fixed;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#172033;
+    color:white;
+    padding:12px 18px;
+    border-radius:8px;
+    z-index:100;
+    display:none;
+    max-width:90%;
+}
+
+@media(min-width:700px){
+    .grid{
+        grid-template-columns:repeat(4,minmax(0,1fr));
+    }
+}
+
+@media(max-width:550px){
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h2>APNA <span>MART</span> Admin</h2>
+    <button id="logoutBtn" class="logout hidden"
+    onclick="logout()">Logout</button>
+</header>
+
+<div class="container">
+
+<!-- LOGIN -->
+
+<div id="loginSection" class="login-box">
+
+    <h2>Admin Login</h2>
+    <p class="small">Only authorized store administrator.</p>
+
+    <label>Email</label>
+    <input id="email" type="email" placeholder="Admin email">
+
+    <label>Password</label>
+    <input id="password" type="password" placeholder="Password">
+
+    <button class="primary" style="width:100%"
+    onclick="login()">Login to Admin</button>
+
+</div>
+
+<!-- DASHBOARD -->
+
+<div id="dashboard" class="hidden">
+
+    <div class="tabs">
+        <button class="active" onclick="tab('overview',this)">Dashboard</button>
+        <button onclick="tab('products',this)">Products</button>
+        <button onclick="tab('categories',this)">Categories</button>
+        <button onclick="tab('orders',this)">Orders</button>
+        <button onclick="tab('requests',this)">Requests</button>
+        <button onclick="tab('care',this)">Customer Care</button>
+        <button onclick="tab('appearance',this)">Appearance</button>
+    </div>
+
+    <!-- OVERVIEW -->
+
+    <section id="overview" class="admin-tab">
+
+        <h2>Store Dashboard</h2>
+
+        <div class="stats">
+            <div class="stat">
+                <span class="small">Products</span>
+                <strong id="totalProducts">0</strong>
+            </div>
+
+            <div class="stat">
+                <span class="small">Categories</span>
+                <strong id="totalCategories">0</strong>
+            </div>
+
+            <div class="stat">
+                <span class="small">Orders</span>
+                <strong id="totalOrders">0</strong>
+            </div>
+
+            <div class="stat">
+                <span class="small">Requests</span>
+                <strong id="totalRequests">0</strong>
+            </div>
+        </div>
+
+        <div class="box">
+            <h3>Welcome to APNA MART</h3>
+            <p class="small" style="margin-top:8px">
+                Manage your products, categories, orders and store appearance.
+            </p>
+            <button class="primary" onclick="tab('products')">
+                Manage Products
+            </button>
+        </div>
+
+    </section>
+
+    <!-- PRODUCTS -->
+
+    <section id="products" class="admin-tab hidden">
+
+        <div class="box">
+
+            <h2 id="productFormTitle">Add New Product</h2>
+
+            <input type="hidden" id="editProductId">
+
+            <label>Product Name</label>
+            <input id="pName" placeholder="Example: Samsung Smartphone">
+
+            <label>Brand</label>
+            <input id="pBrand" placeholder="Brand Name">
+
+            <label>SKU / Product Code</label>
+            <input id="pSku" placeholder="APM-001">
+
+            <label>Category</label>
+            <select id="pCategory"></select>
+
+            <label>Selling Price (₹)</label>
+            <input id="pPrice" type="number" min="0">
+
+            <label>Old Price (₹)</label>
+            <input id="pOld" type="number" min="0">
+
+            <label>Stock Quantity</label>
+            <input id="pStock" type="number" min="0">
+
+            <label>Product Description</label>
+            <textarea id="pDescription"
+            placeholder="Complete product description"></textarea>
+
+            <label>Specifications (one per line: Name: Value)</label>
+            <textarea id="pSpecs"
+            placeholder="Color: Black&#10;Material: Plastic&#10;Weight: 500g&#10;Warranty: 1 Year"></textarea>
+
+            <label>Product Tags (comma separated)</label>
+            <input id="pTags" placeholder="popular, new, electronics">
+
+            <label>Product Main Image URL (optional)</label>
+            <input id="pImageURL" placeholder="https://...">
+
+            <label>Upload Product Photos (maximum 10 total)</label>
+            <input id="pPhotos" type="file" accept="image/*" multiple>
+
+            <p class="small">
+                You can select multiple images from your phone.
+                Maximum 10 photos per product.
+            </p>
+
+            <div id="photoPreview" class="photo-preview"></div>
+
+            <div class="checkrow">
+                <input type="checkbox" id="pFeatured">
+                <label for="pFeatured">Featured Product</label>
+            </div>
+
+            <div class="checkrow">
+                <input type="checkbox" id="pBest">
+                <label for="pBest">Best Seller</label>
+            </div>
+
+            <div class="checkrow">
+                <input type="checkbox" id="pTrending">
+                <label for="pTrending">Trending Product</label>
+            </div>
+
+            <button class="primary" onclick="saveProduct()">
+                Save Product
+            </button>
+
+            <button class="warning" onclick="resetProductForm()">
+                Clear Form
+            </button>
+
+        </div>
+
+        <h2>All Products</h2>
+        <input id="productSearch" placeholder="Search products..."
+        oninput="renderAdminProducts()">
+
+        <div id="adminProducts" class="grid"></div>
+
+    </section>
+
+    <!-- CATEGORIES -->
+
+    <section id="categories" class="admin-tab hidden">
+
+        <div class="box">
+
+            <h2>Category Management</h2>
+
+            <input type="hidden" id="editCategoryId">
+
+            <label>Category Name</label>
+            <input id="catName" placeholder="Example: Electronics">
+
+            <label>Category Image URL</label>
+            <input id="catImage" placeholder="https://...">
+
+            <label>Display Order</label>
+            <input id="catOrder" type="number" value="0">
+
+            <button class="primary" onclick="saveCategory()">
+                Save Category
+            </button>
+
+            <button class="warning" onclick="resetCategoryForm()">
+                Clear
+            </button>
+
+        </div>
+
+        <div id="adminCategories"></div>
+
+    </section>
+
+    <!-- ORDERS -->
+
+    <section id="orders" class="admin-tab hidden">
+
+        <h2>All Orders</h2>
+
+        <button class="secondary"
+        onclick="loadOrders()">Refresh Orders</button>
+
+        <div id="adminOrders"></div>
+
+    </section>
+
+    <!-- REQUESTS -->
+
+    <section id="requests" class="admin-tab hidden">
+
+        <h2>Return / Cancellation Requests</h2>
+
+        <div id="adminRequests"></div>
+
+    </section>
+
+    <!-- CUSTOMER CARE -->
+
+    <section id="care" class="admin-tab hidden">
+
+        <div class="box">
+
+            <h2>Customer Care Management</h2>
+
+            <input type="hidden" id="careId">
+
+            <label>Staff Name</label>
+            <input id="careName">
+
+            <label>Phone</label>
+            <input id="carePhone">
+
+            <label>Email</label>
+            <input id="careEmail" type="email">
+
+            <button class="primary" onclick="saveCare()">
+                Save Contact
+            </button>
+
+        </div>
+
+        <div id="careList"></div>
+
+    </section>
+
+    <!-- APPEARANCE -->
+
+    <section id="appearance" class="admin-tab hidden">
+
+        <div class="box">
+
+            <h2>Store Appearance</h2>
+
+            <label>Store Name</label>
+            <input id="sName">
+
+            <label>Store Tagline</label>
+            <input id="sTagline">
+
+            <label>Primary Color</label>
+            <input id="sPrimary" type="color">
+
+            <label>Accent Color</label>
+            <input id="sAccent" type="color">
+
+            <label>Background Color</label>
+            <input id="sBackground" type="color">
+
+            <label>Bottom Navigation Color</label>
+            <input id="sNavColor" type="color">
+
+            <hr>
+
+            <h3>Customer App Sections</h3>
+
+            <div class="checkrow">
+                <input type="checkbox" id="sSearch">
+                <label for="sSearch">Show Search Bar</label>
+            </div>
+
+            <div class="checkrow">
+                <input type="checkbox" id="sWishlist">
+                <label for="sWishlist">Show Wishlist</label>
+            </div>
+
+            <div class="checkrow">
+                <input type="checkbox" id="sCategories">
+                <label for="sCategories">Show Categories</label>
+            </div>
+
+            <div class="checkrow">
+                <input type="checkbox" id="sOffers">
+                <label for="sOffers">Show Offers</label>
+            </div>
+
+            <button class="primary" onclick="saveSettings()">
+                Save Store Settings
+            </button>
+
+        </div>
+
+    </section>
+
+</div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+
+/* SUPABASE */
+
+const SUPABASE_URL =
+"https://sruahwsaccedcypdfaag.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_4e8SV2CS8lMdQk7VmQ9SYQ_yHeh05pY";
+
+const db = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+let user=null;
+let profile=null;
+let products=[];
+let categories=[];
+let selectedPhotos=[];
+let settings={};
+
+const $=id=>document.getElementById(id);
+
+function escapeHTML(v=""){
+    return String(v).replace(/[&<>"']/g,c=>({
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#39;"
+    })[c]);
+}
+
+function money(v){
+    return "₹"+Number(v||0).toLocaleString("en-IN");
+}
+
+function toast(message){
+    $("toast").textContent=message;
+    $("toast").style.display="block";
+    setTimeout(()=>{$("toast").style.display="none"},3000);
+}
+
+/* LOGIN */
+
+async function login(){
+
+    const email=$("email").value.trim();
+    const password=$("password").value;
+
+    if(!email || !password){
+        toast("Enter email and password.");
+        return;
+    }
+
+    const {data,error}=await db.auth.signInWithPassword({
+        email,password
+    });
+
+    if(error){
+        toast(error.message);
+        return;
+    }
+
+    user=data.user;
+
+    await checkAdmin();
+}
+
+async function checkAdmin(){
+
+    const {data,error}=await db
+        .from("profiles")
+        .select("id,full_name,role")
+        .eq("id",user.id)
+        .maybeSingle();
+
+    if(error || !data || data.role!=="admin"){
+
+        await db.auth.signOut();
+
+        user=null;
+
+        toast("Admin access denied.");
+
+        return;
+    }
+
+    profile=data;
+
+    $("loginSection").classList.add("hidden");
+    $("dashboard").classList.remove("hidden");
+    $("logoutBtn").classList.remove("hidden");
+
+    await loadAll();
+}
+
+async function logout(){
+
+    await db.auth.signOut();
+
+    location.reload();
+}
+
+/* AUTH SESSION */
+
+async function restoreSession(){
+
+    const {data}=await db.auth.getSession();
+
+    if(data.session){
+
+        user=data.session.user;
+
+        await checkAdmin();
+    }
+}
+
+/* TABS */
+
+function tab(id,button){
+
+    document.querySelectorAll(".admin-tab").forEach(s=>{
+        s.classList.add("hidden");
+    });
+
+    $(id).classList.remove("hidden");
+
+    document.querySelectorAll(".tabs button").forEach(b=>{
+        b.classList.remove("active");
+    });
+
+    if(button) button.classList.add("active");
+
+    if(id==="orders") loadOrders();
+    if(id==="requests") loadRequests();
+    if(id==="care") loadCare();
+    if(id==="categories") renderCategories();
+}
+
+/* LOAD ALL */
+
+async function loadAll(){
+
+    await Promise.all([
+        loadCategories(),
+        loadProducts(),
+        loadOrders(),
+        loadRequests(),
+        loadSettings()
+    ]);
+
+    await loadStats();
+}
+
+/* CATEGORIES */
+
+async function loadCategories(){
+
+    const {data,error}=await db
+        .from("categories")
+        .select("*")
+        .order("sort_order");
+
+    if(error){
+        toast("Category error: "+error.message);
+        return;
+    }
+
+    categories=data||[];
+
+    $("pCategory").innerHTML=categories
+    .filter(c=>c.is_active!==false)
+    .map(c=>`
+        <option value="${c.id}">
+            ${escapeHTML(c.name)}
+        </option>
+    `).join("");
+
+    renderCategories();
+}
+
+function renderCategories(){
+
+    $("adminCategories").innerHTML=categories.map(c=>`
+
+        <div class="box">
+
+            <b>${escapeHTML(c.name)}</b>
+
+            <p class="small">
+                ${c.is_active===false?"Inactive":"Active"}
+            </p>
+
+            <p class="small">Order: ${c.sort_order||0}</p>
+
+            <button class="warning"
+            onclick="editCategory('${c.id}')">Edit</button>
+
+            <button class="danger"
+            onclick="deactivateCategory('${c.id}')">
+                Remove
+            </button>
+
+        </div>
+
+    `).join("");
+}
+
+async function saveCategory(){
+
+    const id=$("editCategoryId").value;
+
+    const name=$("catName").value.trim();
+
+    if(!name){
+        toast("Enter category name.");
+        return;
+    }
+
+    const values={
+        name,
+        image_url:$("catImage").value.trim()||null,
+        sort_order:Number($("catOrder").value)||0,
+        is_active:true
+    };
+
+    const result=id
+        ? await db.from("categories").update(values).eq("id",id)
+        : await db.from("categories").insert(values);
+
+    if(result.error){
+        toast(result.error.message);
+        return;
+    }
+
+    resetCategoryForm();
+    await loadCategories();
+
+    toast("Category saved.");
+}
+
+function editCategory(id){
+
+    const c=categories.find(x=>x.id===id);
+
+    if(!c)return;
+
+    $("editCategoryId").value=c.id;
+    $("catName").value=c.name;
+    $("catImage").value=c.image_url||"";
+    $("catOrder").value=c.sort_order||0;
+
+    window.scrollTo(0,0);
+}
+
+async function deactivateCategory(id){
+
+    if(!confirm("Remove this category from the store?"))return;
+
+    const {error}=await db
+        .from("categories")
+        .update({is_active:false})
+        .eq("id",id);
+
+    if(error){
+        toast(error.message);
+        return;
+    }
+
+    await loadCategories();
+
+    toast("Category deactivated.");
+}
+
+function resetCategoryForm(){
+
+    $("editCategoryId").value="";
+    $("catName").value="";
+    $("catImage").value="";
+    $("catOrder").value="0";
+}
+
+/* PRODUCTS */
+
+async function loadProducts(){
+
+    const {data,error}=await db
+        .from("products")
+        .select("*,categories(name)")
+        .order("created_at",{ascending:false});
+
+    if(error){
+        toast("Product error: "+error.message);
+        return;
+    }
+
+    products=data||[];
+
+    renderAdminProducts();
+}
+
+function renderAdminProducts(){
+
+    const q=$("productSearch").value.toLowerCase();
+
+    const list=products.filter(p=>
+        (p.name||"").toLowerCase().includes(q) ||
+        (p.brand||"").toLowerCase().includes(q)
+    );
+
+    $("adminProducts").innerHTML=list.map(p=>`
+
+        <div class="item">
+
+            <img src="${escapeHTML(p.image_url||"")}"
+            onerror="this.style.opacity='.2'">
+
+            <h3>${escapeHTML(p.name)}</h3>
+
+            <b>${money(p.price)}</b>
+
+            <p class="small">Stock: ${p.stock}</p>
+
+            <p class="small">
+                ${p.is_active?"Active":"Inactive"}
+            </p>
+
+            <div class="item-actions">
+
+                <button class="primary"
+                onclick="editProduct('${p.id}')">
+                    Edit
+                </button>
+
+                <button class="danger"
+                onclick="deactivateProduct('${p.id}')">
+                    Remove
+                </button>
+
+            </div>
+
+        </div>
+
+    `).join("");
+}
+
+/* PHOTO PREVIEW */
+
+$("pPhotos").addEventListener("change",()=>{
+
+    selectedPhotos=Array.from($("pPhotos").files||[]);
+
+    if(selectedPhotos.length>10){
+        toast("Maximum 10 photos can be selected.");
+        selectedPhotos=[];
+        $("pPhotos").value="";
+        $("photoPreview").innerHTML="";
+        return;
+    }
+
+    $("photoPreview").innerHTML=selectedPhotos.map(file=>`
+        <img src="${URL.createObjectURL(file)}">
+    `).join("");
+});
+
+/* PRODUCT EDIT */
+
+async function editProduct(id){
+
+    const p=products.find(x=>x.id===id);
+
+    if(!p)return;
+
+    $("editProductId").value=p.id;
+    $("productFormTitle").textContent="Edit Product";
+
+    $("pName").value=p.name||"";
+    $("pBrand").value=p.brand||"";
+    $("pSku").value=p.sku||"";
+    $("pCategory").value=p.category_id||"";
+    $("pPrice").value=p.price||"";
+    $("pOld").value=p.old_price||"";
+    $("pStock").value=p.stock||0;
+    $("pDescription").value=p.description||"";
+
+    const specs=p.specs||{};
+
+    $("pSpecs").value=Object.entries(specs)
+        .map(([k,v])=>`${k}: ${v}`).join("\n");
+
+    $("pTags").value=(p.tags||[]).join(",");
+
+    $("pImageURL").value=p.image_url||"";
+
+    $("pFeatured").checked=!!p.is_featured;
+    $("pBest").checked=!!p.is_bestseller;
+    $("pTrending").checked=!!p.is_trending;
+
+    const {data:images}=await db
+        .from("product_images")
+        .select("*")
+        .eq("product_id",id)
+        .order("display_order");
+
+    $("photoPreview").innerHTML=(images||[]).map(i=>`
+        <img src="${escapeHTML(i.image_url)}">
+    `).join("");
+
+    selectedPhotos=[];
+
+    window.scrollTo(0,0);
+}
+
+/* SAVE PRODUCT */
+
+async function saveProduct(){
+
+    const id=$("editProductId").value;
+
+    const name=$("pName").value.trim();
+    const category_id=$("pCategory").value;
+    const price=Number($("pPrice").value);
+
+    if(!name || !category_id || price<=0){
+        toast("Enter product name, category and valid price.");
+        return;
+    }
+
+    if(selectedPhotos.length>10){
+        toast("Maximum 10 new photos.");
+        return;
+    }
+
+    const specs={};
+
+    $("pSpecs").value.split("\n").forEach(line=>{
+        const parts=line.split(":");
+        if(parts.length>=2){
+            const key=parts.shift().trim();
+            const value=parts.join(":").trim();
+            if(key) specs[key]=value;
+        }
+    });
+
+    const values={
+        name,
+        brand:$("pBrand").value.trim(),
+        sku:$("pSku").value.trim(),
+        category_id,
+        price,
+        old_price:Number($("pOld").value)||null,
+        stock:Number($("pStock").value)||0,
+        description:$("pDescription").value.trim(),
+        image_url:$("pImageURL").value.trim()||null,
+        specs,
+        tags:$("pTags").value.split(",").map(x=>x.trim()).filter(Boolean),
+        is_featured:$("pFeatured").checked,
+        is_bestseller:$("pBest").checked,
+        is_trending:$("pTrending").checked,
+        is_active:true
+    };
+
+    let productId=id;
+
+    if(id){
+
+        const {error}=await db
+            .from("products")
+            .update(values)
+            .eq("id",id);
+
+        if(error){
+            toast(error.message);
+            return;
+        }
+
+    }else{
+
+        const {data,error}=await db
+            .from("products")
+            .insert(values)
+            .select("id")
+            .single();
+
+        if(error){
+            toast(error.message);
+            return;
+        }
+
+        productId=data.id;
+    }
+
+    /* UPLOAD PHOTOS */
+
+    if(selectedPhotos.length){
+
+        const {data:oldImages}=await db
+            .from("product_images")
+            .select("id")
+            .eq("product_id",productId);
+
+        const oldCount=oldImages?.length||0;
+
+        if(oldCount+selectedPhotos.length>10){
+            toast("This product can have only 10 photos. Remove old photos first.");
+            return;
+        }
+
+        let uploaded=[];
+
+        for(let i=0;i<selectedPhotos.length;i++){
+
+            const file=selectedPhotos[i];
+
+            if(!file.type.startsWith("image/")){
+                toast("Only image files are allowed.");
+                return;
+            }
+
+            const ext=file.name.split(".").pop().toLowerCase();
+
+            const path=`products/${productId}/${Date.now()}_${i}.${ext}`;
+
+            const {error:uploadError}=await db.storage
+                .from("product-media")
+                .upload(path,file,{upsert:false});
+
+            if(uploadError){
+                toast("Photo upload failed: "+uploadError.message);
+                return;
+            }
+
+            const {data:urlData}=db.storage
+                .from("product-media")
+                .getPublicUrl(path);
+
+            uploaded.push({
+                product_id:productId,
+                image_url:urlData.publicUrl,
+                display_order:oldCount+i
+            });
+        }
+
+        if(uploaded.length){
+
+            const {error}=await db
+                .from("product_images")
+                .insert(uploaded);
+
+            if(error){
+                toast(error.message);
+                return;
+            }
+
+            if(!values.image_url){
+                values.image_url=uploaded[0].image_url;
+
+                await db.from("products")
+                    .update({image_url:values.image_url})
+                    .eq("id",productId);
+            }
+        }
+    }
+
+    resetProductForm();
+
+    await loadProducts();
+    await loadStats();
+
+    toast("Product saved successfully.");
+}
+
+async function deactivateProduct(id){
+
+    if(!confirm("Deactivate this product?"))return;
+
+    const {error}=await db
+        .from("products")
+        .update({is_active:false})
+        .eq("id",id);
+
+    if(error){
+        toast(error.message);
+        return;
+    }
+
+    await loadProducts();
+    await loadStats();
+
+    toast("Product deactivated.");
+}
+
+function resetProductForm(){
+
+    $("editProductId").value="";
+    $("productFormTitle").textContent="Add New Product";
+
+    [
+        "pName","pBrand","pSku","pPrice","pOld",
+        "pStock","pDescription","pSpecs","pTags","pImageURL"
+    ].forEach(id=>$(id).value="");
+
+    $("pStock").value=0;
+
+    $("pFeatured").checked=false;
+    $("pBest").checked=false;
+    $("pTrending").checked=false;
+
+    $("pPhotos").value="";
+    $("photoPreview").innerHTML="";
+
+    selectedPhotos=[];
+}
+
+/* ORDERS */
+
+async function loadOrders(){
+
+    const {data,error}=await db
+        .from("orders")
+        .select("*")
+        .order("created_at",{ascending:false})
+        .limit(100);
+
+    if(error){
+        $("adminOrders").textContent=error.message;
+        return;
+    }
+
+    $("adminOrders").innerHTML=(data||[]).map(o=>`
+
+        <div class="box">
+
+            <b>Order: ${escapeHTML(o.order_number)}</b>
+
+            <p class="small">
+                ${escapeHTML(o.delivery_name||"")}
+                · ${escapeHTML(o.delivery_phone||"")}
+            </p>
+
+            <p>${escapeHTML(o.delivery_address||"")}</p>
+
+            <h3>${money(o.total_amount)}</h3>
+
+            <label>Order Status</label>
+
+            <select onchange="updateOrder('${o.id}',this.value)">
+
+                ${[
+                    "pending","confirmed","packed",
+                    "shipped","out_for_delivery",
+                    "delivered","cancelled"
+                ].map(s=>`
+                    <option value="${s}"
+                    ${o.status===s?"selected":""}>
+                        ${s}
+                    </option>
+                `).join("")}
+
+            </select>
+
+            <p class="small">
+                ${new Date(o.created_at).toLocaleString()}
+            </p>
+
+        </div>
+
+    `).join("");
+}
+
+async function updateOrder(id,status){
+
+    const {error}=await db
+        .from("orders")
+        .update({status})
+        .eq("id",id);
+
+    toast(error?error.message:"Order updated.");
+
+    await loadOrders();
+}
+
+/* REQUESTS */
+
+async function loadRequests(){
+
+    const {data,error}=await db
+        .from("order_requests")
+        .select("*")
+        .order("created_at",{ascending:false});
+
+    if(error){
+        $("adminRequests").textContent=error.message;
+        return;
+    }
+
+    $("adminRequests").innerHTML=(data||[]).map(r=>`
+
+        <div class="box">
+
+            <b>${escapeHTML(r.request_type)}</b>
+
+            <p>${escapeHTML(r.reason||"No reason supplied")}</p>
+
+            <p class="small">Order ID: ${escapeHTML(r.order_id)}</p>
+
+            <select onchange="updateRequest('${r.id}',this.value)">
+
+                ${["pending","approved","rejected","completed"].map(s=>`
+                    <option value="${s}"
+                    ${r.status===s?"selected":""}>
+                        ${s}
+                    </option>
+                `).join("")}
+
+            </select>
+
+        </div>
+
+    `).join("");
+}
+
+async function updateRequest(id,status){
+
+    const {error}=await db
+        .from("order_requests")
+        .update({status})
+        .eq("id",id);
+
+    toast(error?error.message:"Request updated.");
+
+    await loadRequests();
+}
+
+/* CUSTOMER CARE */
+
+async function loadCare(){
+
+    const {data,error}=await db
+        .from("customer_care")
+        .select("*")
+        .order("created_at",{ascending:false});
+
+    if(error){
+        $("careList").textContent=error.message;
+        return;
+    }
+
+    $("careList").innerHTML=(data||[]).map(c=>`
+
+        <div class="box">
+
+            <b>${escapeHTML(c.staff_name)}</b>
+
+            <p>${escapeHTML(c.phone||"")}</p>
+            <p>${escapeHTML(c.email||"")}</p>
+
+            <button class="warning"
+            onclick="editCare('${c.id}')">Edit</button>
+
+            <button class="danger"
+            onclick="removeCare('${c.id}')">Remove</button>
+
+        </div>
+
+    `).join("");
+}
+
+async function saveCare(){
+
+    const id=$("careId").value;
+
+    const values={
+        staff_name:$("careName").value.trim(),
+        phone:$("carePhone").value.trim(),
+        email:$("careEmail").value.trim(),
+        is_active:true
+    };
+
+    if(!values.staff_name){
+        toast("Enter staff name.");
+        return;
+    }
+
+    const result=id
+        ? await db.from("customer_care").update(values).eq("id",id)
+        : await db.from("customer_care").insert(values);
+
+    if(result.error){
+        toast(result.error.message);
+        return;
+    }
+
+    $("careId").value="";
+    $("careName").value="";
+    $("carePhone").value="";
+    $("careEmail").value="";
+
+    await loadCare();
+
+    toast("Customer care saved.");
+}
+
+async function editCare(id){
+
+    const {data}=await db
+        .from("customer_care")
+        .select("*")
+        .eq("id",id)
+        .single();
+
+    if(!data)return;
+
+    $("careId").value=data.id;
+    $("careName").value=data.staff_name||"";
+    $("carePhone").value=data.phone||"";
+    $("careEmail").value=data.email||"";
+}
+
+async function removeCare(id){
+
+    if(!confirm("Remove this customer care contact?"))return;
+
+    const {error}=await db
+        .from("customer_care")
+        .update({is_active:false})
+        .eq("id",id);
+
+    toast(error?"Could not remove contact.":"Contact deactivated.");
+
+    await loadCare();
+}
+
+/* SETTINGS */
+
+async function loadSettings(){
+
+    const {data,error}=await db
+        .from("site_settings")
+        .select("*")
+        .eq("id",1)
+        .maybeSingle();
+
+    if(error){
+        toast("Settings: "+error.message);
+        return;
+    }
+
+    settings=data?.settings||{};
+
+    $("sName").value=settings.store_name||"APNA MART";
+    $("sTagline").value=settings.tagline||"";
+
+    $("sPrimary").value=settings.primary_color||"#102b55";
+    $("sAccent").value=settings.accent_color||"#f5a623";
+    $("sBackground").value=settings.background_color||"#ffffff";
+    $("sNavColor").value=settings.bottom_nav_color||"#102b55";
+
+    $("sSearch").checked=settings.search_enabled!==false;
+    $("sWishlist").checked=settings.wishlist_enabled!==false;
+    $("sCategories").checked=settings.categories_enabled!==false;
+    $("sOffers").checked=settings.offers_enabled!==false;
+}
+
+async function saveSettings(){
+
+    const values={
+        store_name:$("sName").value.trim(),
+        tagline:$("sTagline").value.trim(),
+        primary_color:$("sPrimary").value,
+        accent_color:$("sAccent").value,
+        background_color:$("sBackground").value,
+        bottom_nav_color:$("sNavColor").value,
+        search_enabled:$("sSearch").checked,
+        wishlist_enabled:$("sWishlist").checked,
+        categories_enabled:$("sCategories").checked,
+        offers_enabled:$("sOffers").checked
+    };
+
+    const {error}=await db
+        .from("site_settings")
+        .upsert({
+            id:1,
+            settings:values,
+            updated_at:new Date().toISOString()
+        });
+
+    if(error){
+        toast(error.message);
+        return;
+    }
+
+    toast("Store settings saved.");
+}
+
+/* STATS */
+
+async function loadStats(){
+
+    const [p,c,o,r]=await Promise.all([
+
+        db.from("products")
+            .select("id",{count:"exact",head:true}),
+
+        db.from("categories")
+            .select("id",{count:"exact",head:true}),
+
+        db.from("orders")
+            .select("id",{count:"exact",head:true}),
+
+        db.from("order_requests")
+            .select("id",{count:"exact",head:true})
+
+    ]);
+
+    $("totalProducts").textContent=p.count||0;
+    $("totalCategories").textContent=c.count||0;
+    $("totalOrders").textContent=o.count||0;
+    $("totalRequests").textContent=r.count||0;
+}
+
+/* START */
+
+restoreSession();
+
+</script>
+
+</body>
+      </html>
