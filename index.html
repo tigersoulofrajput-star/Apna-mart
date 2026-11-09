@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APNA MART | Online Shopping</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f3f5f8;
+    color: #172337;
+}
+
+header {
+    background: #101f3d;
+    color: white;
+    padding: 15px 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: bold;
+    color: white;
+}
+
+.logo span {
+    color: #ffb700;
+}
+
+.search-box {
+    display: flex;
+    flex: 1;
+    max-width: 500px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    outline: none;
+    border-radius: 5px 0 0 5px;
+}
+
+.search-box button {
+    background: #ffb700;
+    border: none;
+    padding: 12px 18px;
+    cursor: pointer;
+    border-radius: 0 5px 5px 0;
+}
+
+.cart-button {
+    background: #ffb700;
+    color: #101f3d;
+    border: none;
+    padding: 12px 17px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+nav {
+    background: white;
+    padding: 13px 5%;
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    border-bottom: 1px solid #ddd;
+}
+
+nav button {
+    border: none;
+    background: transparent;
+    font-weight: bold;
+    cursor: pointer;
+    white-space: nowrap;
+    color: #172337;
+}
+
+nav button:hover {
+    color: #e89d00;
+}
+
+.hero {
+    margin: 20px auto;
+    width: 90%;
+    min-height: 190px;
+    background: linear-gradient(120deg, #102448, #24548a);
+    border-radius: 12px;
+    padding: 35px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.hero h1 {
+    font-size: 30px;
+    margin-bottom: 12px;
+}
+
+.hero p {
+    line-height: 1.5;
+}
+
+.hero button {
+    margin-top: 15px;
+    padding: 11px 20px;
+    border: none;
+    background: #ffb700;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.section-title {
+    margin: 25px 5% 15px;
+    font-size: 23px;
+}
+
+.products {
+    width: 90%;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 18px;
+}
+
+.product {
+    background: white;
+    border-radius: 10px;
+    padding: 14px;
+    box-shadow: 0 2px 8px #00000012;
+    transition: 0.2s;
+}
+
+.product:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 5px 15px #00000020;
+}
+
+.product-image {
+    height: 145px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f0f3f7;
+    border-radius: 7px;
+    font-size: 65px;
+    cursor: pointer;
+}
+
+.product h3 {
+    margin: 12px 0 7px;
+    font-size: 16px;
+}
+
+.price {
+    font-size: 19px;
+    font-weight: bold;
+    color: #152b4b;
+}
+
+.old-price {
+    color: #888;
+    text-decoration: line-through;
+    font-size: 13px;
+    margin-left: 5px;
+}
+
+.rating {
+    color: #d98b00;
+    margin: 7px 0;
+    font-size: 14px;
+}
+
+.product button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.details-btn {
+    background: #e9edf3;
+    color: #172337;
+}
+
+.add-btn {
+    background: #ffb700;
+    color: #172337;
+}
+
+.empty-message {
+    text-align: center;
+    padding: 35px;
+    color: #777;
+    grid-column: 1 / -1;
+}
+
+/* POPUP */
+
+.overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #0009;
+    z-index: 10;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+}
+
+.popup {
+    background: white;
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 22px;
+    border-radius: 12px;
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    right: 15px;
+    top: 12px;
+    border: none;
+    background: none;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.popup-image {
+    text-align: center;
+    font-size: 85px;
+    background: #f1f4f8;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 15px 0;
+}
+
+.popup h2 {
+    margin-bottom: 10px;
+}
+
+.popup p {
+    line-height: 1.6;
+    margin: 10px 0;
+}
+
+.popup button.action {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    background: #ffb700;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+/* CART */
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.cart-emoji {
+    font-size: 35px;
+}
+
+.cart-info {
+    flex: 1;
+}
+
+.cart-info h4 {
+    margin-bottom: 5px;
+}
+
+.quantity {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 7px;
+}
+
+.quantity button {
+    border: none;
+    background: #e9edf3;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.remove-btn {
+    background: #ffe5e5;
+    color: #b00020;
+    border: none;
+    padding: 7px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.total {
+    font-size: 21px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.checkout-btn {
+    width: 100%;
+    background: #ffb700;
+    border: none;
+    padding: 14px;
+    border-radius: 6px;
+    font-weight: bold;
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+.form-group {
+    margin: 13px 0;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline-color: #24548a;
+}
+
+.form-group textarea {
+    min-height: 85px;
+    resize: vertical;
+}
+
+footer {
+    background: #101f3d;
+    color: white;
+    text-align: center;
+    padding: 25px;
+    margin-top: 40px;
+    line-height: 1.8;
+}
+
+@media(max-width:600px) {
+    header {
+        justify-content: center;
+    }
+
+    .search-box {
+        order: 3;
+        flex-basis: 100%;
+    }
+
+    .hero {
+        padding: 25px;
+    }
+
+    .hero h1 {
+        font-size: 24px;
+    }
+
+    .products {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .product {
+        padding: 9px;
+    }
+
+    .product-image {
+        height: 115px;
+        font-size: 50px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">APNA <span>MART</span></div>
+
+    <div class="search-box">
+        <input type="text" id="searchInput"
+        placeholder="Search products..."
+        oninput="renderProducts()">
+        <button onclick="renderProducts()">Search</button>
+    </div>
+
+    <button class="cart-button" onclick="openCart()">
+        🛒 Cart (<span id="cartCount">0</span>)
+    </button>
+</header>
+
+<nav>
+    <button onclick="setCategory('All')">All</button>
+    <button onclick="setCategory('Mobiles')">Mobiles</button>
+    <button onclick="setCategory('Electronics')">Electronics</button>
+    <button onclick="setCategory('Fashion')">Fashion</button>
+    <button onclick="setCategory('Home')">Home</button>
+    <button onclick="setCategory('Beauty')">Beauty</button>
+    <button onclick="setCategory('Books')">Books</button>
+    <button onclick="setCategory('Grocery')">Grocery</button>
+    <button onclick="setCategory('Sports')">Sports</button>
+</nav>
+
+<section class="hero">
+    <div>
+        <h1>Welcome to APNA MART</h1>
+        <p>Everything You Need, All in One Place.</p>
+        <button onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})">
+            Shop Now
+        </button>
+    </div>
+    <div style="font-size:65px">🛍️</div>
+</section>
+
+<h2 class="section-title" id="shop">Explore Products</h2>
+
+<section class="products" id="productList"></section>
+
+<!-- PRODUCT DETAILS POPUP -->
+
+<div class="overlay" id="detailsOverlay">
+    <div class="popup">
+        <button class="close" onclick="closePopup('detailsOverlay')">×</button>
+        <div id="productDetails"></div>
+    </div>
+</div>
+
+<!-- CART POPUP -->
+
+<div class="overlay" id="cartOverlay">
+    <div class="popup">
+        <button class="close" onclick="closePopup('cartOverlay')">×</button>
+        <h2>🛒 Your Shopping Cart</h2>
+        <div id="cartItems"></div>
+        <div class="total" id="cartTotal">Total: ₹0</div>
+        <button class="checkout-btn" onclick="openCheckout()">
+            Proceed to Checkout
+        </button>
+    </div>
+</div>
+
+<!-- CHECKOUT POPUP -->
+
+<div class="overlay" id="checkoutOverlay">
+    <div class="popup">
+        <button class="close" onclick="closePopup('checkoutOverlay')">×</button>
+
+        <h2>Checkout</h2>
+        <p>Enter your delivery details below.</p>
+
+        <form id="checkoutForm">
+
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="customerName"
+                placeholder="Enter your name" required>
+            </div>
+
+            <div class="form-group">
+                <label>Mobile Number</label>
+                <input type="tel" id="customerPhone"
+                placeholder="10-digit mobile number"
+                pattern="[6-9][0-9]{9}" maxlength="10" required>
+            </div>
+
+            <div class="form-group">
+                <label>Delivery Address</label>
+                <textarea id="customerAddress"
+                placeholder="House number, street, city, PIN code"
+                required></textarea>
+            </div>
+
+            <div class="total" id="checkoutTotal"></div>
+
+            <button type="submit" class="checkout-btn">
+                Place Demo Order
+            </button>
+
+        </form>
+    </div>
+</div>
+
+<footer>
+    <h2>APNA MART</h2>
+    <p>Everything You Need, All in One Place.</p>
+    <p>© 2026 APNA MART. All Rights Reserved.</p>
+</footer>
+
+<script>
+
+// PRODUCT DATABASE (DEMO)
+
+const products = [
+    {
+        id: 1,
+        name: "Smartphone",
+        category: "Mobiles",
+        price: 12999,
+        oldPrice: 15999,
+        emoji: "📱",
+        rating: "⭐⭐⭐⭐⭐",
+        description: "A stylish smartphone with a large display and modern features."
+    },
+    {
+        id: 2,
+        name: "Wireless Headphones",
+        category: "Electronics",
+        price: 1499,
+        oldPrice: 2499,
+        emoji: "🎧",
+        rating: "⭐⭐⭐⭐",
+        description: "Comfortable wireless headphones for music and entertainment."
+    },
+    {
+        id: 3,
+        name: "Men's T-Shirt",
+        category: "Fashion",
+        price: 499,
+        oldPrice: 799,
+        emoji: "👕",
+        rating: "⭐⭐⭐⭐",
+        description: "Casual everyday T-shirt."
+    },
+    {
+        id: 4,
+        name: "Running Shoes",
+        category: "Fashion",
+        price: 1799,
+        oldPrice: 2299,
+        emoji: "👟",
+        rating: "⭐⭐⭐⭐⭐",
+        description: "Comfortable shoes for everyday activities."
+    },
+    {
+        id: 5,
+        name: "Kitchen Set",
+        category: "Home",
+        price: 899,
+        oldPrice: 1199,
+        emoji: "🍳",
+        rating: "⭐⭐⭐⭐",
+        description: "Useful kitchen essentials for your home."
+    },
+    {
+        id: 6,
+        name: "Face Care Kit",
+        category: "Beauty",
+        price: 699,
+        oldPrice: 999,
+        emoji: "🧴",
+        rating: "⭐⭐⭐⭐",
+        description: "A skincare kit for your daily care routine."
+    },
+    {
+        id: 7,
+        name: "Study Books",
+        category: "Books",
+        price: 399,
+        oldPrice: 599,
+        emoji: "📚",
+        rating: "⭐⭐⭐⭐⭐",
+        description: "Books for learning and reading."
+    },
+    {
+        id: 8,
+        name: "Grocery Pack",
+        category: "Grocery",
+        price: 599,
+        oldPrice: 699,
+        emoji: "🛒",
+        rating: "⭐⭐⭐⭐",
+        description: "Everyday grocery essentials."
+    },
+    {
+        id: 9,
+        name: "Football",
+        category: "Sports",
+        price: 799,
+        oldPrice: 999,
+        emoji: "⚽",
+        rating: "⭐⭐⭐⭐",
+        description: "Football for sports and outdoor activities."
+    },
+    {
+        id: 10,
+        name: "Smart Watch",
+        category: "Electronics",
+        price: 1999,
+        oldPrice: 2999,
+        emoji: "⌚",
+        rating: "⭐⭐⭐⭐⭐",
+        description: "A modern smartwatch design."
+    },
+    {
+        id: 11,
+        name: "Backpack",
+        category: "Fashion",
+        price: 899,
+        oldPrice: 1299,
+        emoji: "🎒",
+        rating: "⭐⭐⭐⭐",
+        description: "A useful backpack for daily use."
+    },
+    {
+        id: 12,
+        name: "Table Lamp",
+        category: "Home",
+        price: 599,
+        oldPrice: 799,
+        emoji: "💡",
+        rating: "⭐⭐⭐⭐",
+        description: "A stylish lamp for your study table."
+    }
+];
+
+// CART DATA
+
+let cart = JSON.parse(localStorage.getItem("apnaMartCart")) || [];
+let currentCategory = "All";
+
+// SAVE CART
+
+function saveCart() {
+    localStorage.setItem("apnaMartCart", JSON.stringify(cart));
+    updateCartCount();
+}
+
+// SHOW PRODUCTS
+
+function renderProducts() {
+
+    const search = document.getElementById("searchInput")
+        .value.toLowerCase();
+
+    const list = document.getElementById("productList");
+
+    const filtered = products.filter(product => {
+
+        const matchCategory =
+            currentCategory === "All" ||
+            product.category === currentCategory;
+
+        const matchSearch =
+            product.name.toLowerCase().includes(search) ||
+            product.category.toLowerCase().includes(search);
+
+        return matchCategory && matchSearch;
+    });
+
+    list.innerHTML = "";
+
+    if (filtered.length === 0) {
+        list.innerHTML =
+            '<div class="empty-message">No products found.</div>';
+        return;
+    }
+
+    filtered.forEach(product => {
+
+        list.innerHTML += `
+            <div class="product">
+
+                <div class="product-image"
+                onclick="showDetails(${product.id})">
+                    ${product.emoji}
+                </div>
+
+                <h3>${product.name}</h3>
+
+                <div class="price">
+                    ₹${product.price}
+                    <span class="old-price">
+                        ₹${product.oldPrice}
+                    </span>
+                </div>
+
+                <div class="rating">${product.rating}</div>
+
+                <button class="details-btn"
+                onclick="showDetails(${product.id})">
+                    View Details
+                </button>
+
+                <button class="add-btn"
+                onclick="addToCart(${product.id})">
+                    Add to Cart
+                </button>
+
+            </div>
+        `;
+    });
+}
+
+// CATEGORY FILTER
+
+function setCategory(category) {
+    currentCategory = category;
+    renderProducts();
+
+    document.getElementById("shop")
+        .scrollIntoView({behavior:"smooth"});
+}
+
+// PRODUCT DETAILS
+
+function showDetails(id) {
+
+    const product = products.find(p => p.id === id);
+
+    document.getElementById("productDetails").innerHTML = `
+
+        <div class="popup-image">${product.emoji}</div>
+
+        <h2>${product.name}</h2>
+
+        <p><b>Category:</b> ${product.category}</p>
+
+        <p class="price">₹${product.price}</p>
+
+        <p>${product.rating}</p>
+
+        <p>${product.description}</p>
+
+        <button class="action"
+        onclick="addToCart(${product.id});closePopup('detailsOverlay')">
+            Add to Cart
+        </button>
+    `;
+
+    openPopup("detailsOverlay");
+}
+
+// ADD TO CART
+
+function addToCart(id) {
+
+    const existing = cart.find(item => item.id === id);
+
+    if (existing) {
+        existing.quantity++;
+    } else {
+        cart.push({
+            id: id,
+            quantity: 1
+        });
+    }
+
+    saveCart();
+
+    alert("Product added to cart!");
+}
+
+// UPDATE CART COUNT
+
+function updateCartCount() {
+
+    const count = cart.reduce(
+        (sum, item) => sum + item.quantity, 0
+    );
+
+    document.getElementById("cartCount").innerText = count;
+}
+
+// OPEN CART
+
+function openCart() {
+    renderCart();
+    openPopup("cartOverlay");
+}
+
+// SHOW CART ITEMS
+
+function renderCart() {
+
+    const container = document.getElementById("cartItems");
+
+    container.innerHTML = "";
+
+    if (cart.length === 0) {
+
+        container.innerHTML =
+            '<p style="padding:25px;text-align:center;">Your cart is empty.</p>';
+
+    }
+
+    cart.forEach(item => {
+
+        const product = products.find(p => p.id === item.id);
+
+        if (!product) return;
+
+        container.innerHTML += `
+
+            <div class="cart-item">
+
+                <div class="cart-emoji">${product.emoji}</div>
+
+                <div class="cart-info">
+
+                    <h4>${product.name}</h4>
+
+                    <b>₹${product.price}</b>
+
+                    <div class="quantity">
+
+                        <button onclick="changeQuantity(${product.id},-1)">−</button>
+
+                        <span>${item.quantity}</span>
+
+                        <button onclick="changeQuantity(${product.id},1)">+</button>
+
+                    </div>
+
+                </div>
+
+                <button class="remove-btn"
+                onclick="removeItem(${product.id})">
+                    Remove
+                </button>
+
+            </div>
+
+        `;
+    });
+
+    document.getElementById("cartTotal").innerText =
+        "Total: ₹" + calculateTotal();
+}
+
+// CHANGE QUANTITY
+
+function changeQuantity(id, change) {
+
+    const item = cart.find(p => p.id === id);
+
+    if (!item) return;
+
+    item.quantity += change;
+
+    if (item.quantity <= 0) {
+        cart = cart.filter(p => p.id !== id);
+    }
+
+    saveCart();
+    renderCart();
+}
+
+// REMOVE PRODUCT
+
+function removeItem(id) {
+
+    cart = cart.filter(item => item.id !== id);
+
+    saveCart();
+    renderCart();
+}
+
+// CALCULATE TOTAL
+
+function calculateTotal() {
+
+    return cart.reduce((total, item) => {
+
+        const product = products.find(p => p.id === item.id);
+
+        return total + (product ? product.price * item.quantity : 0);
+
+    }, 0);
+}
+
+// OPEN CHECKOUT
+
+function openCheckout() {
+
+    if (cart.length === 0) {
+        alert("Your cart is empty!");
+        return;
+    }
+
+    document.getElementById("checkoutTotal").innerText =
+        "Order Total: ₹" + calculateTotal();
+
+    closePopup("cartOverlay");
+    openPopup("checkoutOverlay");
+}
+
+// PLACE DEMO ORDER
+
+document.getElementById("checkoutForm")
+.addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    const name =
+        document.getElementById("customerName").value.trim();
+
+    const phone =
+        document.getElementById("customerPhone").value.trim();
+
+    const address =
+        document.getElementById("customerAddress").value.trim();
+
+    if (!/^[6-9][0-9]{9}$/.test(phone)) {
+        alert("Please enter a valid 10-digit mobile number.");
+        return;
+    }
+
+    if (!name || !address) {
+        alert("Please fill all details.");
+        return;
+    }
+
+    const order = {
+        customer: name,
+        phone: phone,
+        address: address,
+        items: cart,
+        total: calculateTotal(),
+        date: new Date().toLocaleString()
+    };
+
+    // DEMO ONLY: ORDER SAVED IN THIS BROWSER
+
+    let orders = JSON.parse(
+        localStorage.getItem("apnaMartOrders")
+    ) || [];
+
+    orders.push(order);
+
+    localStorage.setItem(
+        "apnaMartOrders",
+        JSON.stringify(orders)
+    );
+
+    alert(
+        "Demo order placed successfully!\n\n" +
+        "Name: " + name +
+        "\nTotal: ₹" + order.total +
+        "\n\nThis is a demo. No real order or payment was processed."
+    );
+
+    cart = [];
+
+    saveCart();
+
+    document.getElementById("checkoutForm").reset();
+
+    closePopup("checkoutOverlay");
+});
+
+// POPUP FUNCTIONS
+
+function openPopup(id) {
+    document.getElementById(id).style.display = "flex";
+}
+
+function closePopup(id) {
+    document.getElementById(id).style.display = "none";
+}
+
+// CLOSE WHEN CLICKING OUTSIDE
+
+document.querySelectorAll(".overlay").forEach(overlay => {
+
+    overlay.addEventListener("click", function(event) {
+
+        if (event.target === overlay) {
+            overlay.style.display = "none";
+        }
+
+    });
+
+});
+
+// INITIALIZE WEBSITE
+
+renderProducts();
+updateCartCount();
+
+</script>
+
+</body>
+</html>
